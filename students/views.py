@@ -7,7 +7,7 @@ def students(request):
         {
             'id': 1,
             'Name' : 'Lwazi Tobose',
-            'Title' : 'AI/ML Engineer',
+            'Title' : 'Python Backend Engineer',
         }
     ]
     return HttpResponse(students)

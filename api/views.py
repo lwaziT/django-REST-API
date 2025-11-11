@@ -6,3 +6,4 @@ from students.models import Student
 def studentsView(request):
     students = Student.objects.all()
     return JsonResponse(students)
+
