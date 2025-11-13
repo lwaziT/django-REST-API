@@ -13,7 +13,6 @@ def studentsView(request):
         students = Student.objects.all()
         serializer = StudentSerializer(students, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
     elif request.method == 'POST':
         # Send data to the student table
         serializer = StudentSerializer(data=request.data)
@@ -22,7 +21,8 @@ def studentsView(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'PUT'])
+
+@api_view(['GET', 'PUT', 'DELETE'])
 def studentDetailView(request, pk):
     #Get student data by id
     try:
@@ -41,3 +41,8 @@ def studentDetailView(request, pk):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        student.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    return None
