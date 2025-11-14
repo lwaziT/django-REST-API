@@ -1,8 +1,10 @@
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import StudentSerializer
+from .serializers import StudentSerializer, EmployeesSerializer
 from students.models import Student
+from employees.models import Employee
 
 # Create your views here.
 @api_view(['GET', 'POST'])
@@ -46,3 +48,16 @@ def studentDetailView(request, pk):
         student.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     return None
+
+class Employees(APIView):
+    def get(self, request):
+        employees = Employee.objects.all()
+        serializer = EmployeesSerializer(employees, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = EmployeesSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
