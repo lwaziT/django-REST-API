@@ -3,6 +3,8 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+import employees
 from .serializers import StudentSerializer, EmployeesSerializer
 from students.models import Student
 from employees.models import Employee
@@ -98,25 +100,38 @@ def studentDetailView(request, pk):
 #         employee.delete()
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class Employees(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+# Mixins
+# class Employees(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+#     queryset = Employee.objects.all()
+#     serializer_class = EmployeesSerializer
+#
+#     def get(self, request):
+#         return self.list(request)
+#
+#     def post(self, request):
+#         return self.create(request)
+
+# Mixins
+# class EmployeeDetail(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,generics.GenericAPIView):
+#     queryset = Employee.objects.all()
+#     serializer_class = EmployeesSerializer
+#
+#     def get(self, request, pk):
+#         return self.retrieve(request, pk)
+#
+#     def put(self, request, pk):
+#         return self.update(request, pk)
+#
+#     def delete(self, request, pk):
+#         return self.destroy(request, pk)
+
+# Generics
+class Employees(generics.ListCreateAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeesSerializer
 
-    def get(self, request):
-        return self.list(request)
-
-    def post(self, request):
-        return self.create(request)
-
-class EmployeeDetail(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,generics.GenericAPIView):
+# Generics
+class EmployeeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeesSerializer
-
-    def get(self, request, pk):
-        return self.retrieve(request, pk)
-
-    def put(self, request, pk):
-        return self.update(request, pk)
-
-    def delete(self, request, pk):
-        return self.destroy(request, pk)
+    lookup_field = 'pk'
