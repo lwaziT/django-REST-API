@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .serializers import StudentSerializer, EmployeesSerializer
 from students.models import Student
 from employees.models import Employee
+from rest_framework import mixins, generics
 
 # Create your views here.
 @api_view(['GET', 'POST'])
@@ -51,48 +52,71 @@ def studentDetailView(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
     return None
 
-class Employees(APIView):
-    # Get all employee objects/data
+# class Employees(APIView):
+#     # Get all employee objects/data
+#     def get(self, request):
+#         employees = Employee.objects.all()
+#         serializer = EmployeesSerializer(employees, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+#
+#     # Add new employee
+#     def post(self, request):
+#         serializer = EmployeesSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+# class EmployeeDetail(APIView):
+#     # Class to handle employee data
+#
+#     # Make sure employee object exists
+#     def get_object(self, pk):
+#         try:
+#             return Employee.objects.get(pk=pk)
+#         except Employee.DoesNotExist:
+#             raise Http404
+#
+#     # Get employee by id
+#     def get(self,request,pk):
+#         employee = self.get_object(pk)
+#         serializer = EmployeesSerializer(employee)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+#
+#     # Update employee
+#     def put(self, request, pk):
+#         employee = self.get_object(pk)
+#         serializer = EmployeesSerializer(employee, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#     # Delete employee
+#     def delete(self, request, pk):
+#         employee = self.get_object(pk)
+#         employee.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class Employees(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeesSerializer
+
     def get(self, request):
-        employees = Employee.objects.all()
-        serializer = EmployeesSerializer(employees, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return self.list(request)
 
-    # Add new employee
     def post(self, request):
-        serializer = EmployeesSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return self.create(request)
 
-class EmployeeDetail(APIView):
-    # Class to handle employee data
+class EmployeeDetail(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,generics.GenericAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeesSerializer
 
-    # Make sure employee object exists
-    def get_object(self, pk):
-        try:
-            return Employee.objects.get(pk=pk)
-        except Employee.DoesNotExist:
-            raise Http404
+    def get(self, request, pk):
+        return self.retrieve(request, pk)
 
-    # Get employee by id
-    def get(self,request,pk):
-        employee = self.get_object(pk)
-        serializer = EmployeesSerializer(employee)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    # Update employee
     def put(self, request, pk):
-        employee = self.get_object(pk)
-        serializer = EmployeesSerializer(employee, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return self.update(request, pk)
 
-    # Delete employee
     def delete(self, request, pk):
-        employee = self.get_object(pk)
-        employee.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return self.destroy(request, pk)
