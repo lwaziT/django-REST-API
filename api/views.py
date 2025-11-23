@@ -4,8 +4,11 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from blogs.models import Blog, Comment
+from blogs.serializers import BlogSerializer, CommentSerializer
 
 import employees
+from blogs.models import Blog
 from .serializers import StudentSerializer, EmployeesSerializer
 from students.models import Student
 from employees.models import Employee
@@ -177,4 +180,11 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeesSerializer
 
+# Give access to CRUD operations using generics
+class BlogsView(generics.ListCreateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
 
+class CommentsView(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
