@@ -12,6 +12,8 @@ from employees.models import Employee
 from rest_framework import mixins, generics
 
 # Create your views here.
+
+# Function-based views
 @api_view(['GET', 'POST'])
 def studentsView(request):
 
@@ -55,6 +57,7 @@ def studentDetailView(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
     return None
 
+# Class-based views
 # class Employees(APIView):
 #     # Get all employee objects/data
 #     def get(self, request):
@@ -127,7 +130,7 @@ def studentDetailView(request, pk):
 #         return self.destroy(request, pk)
 
 # Generics
-# class Employees(generics.ListCreateAPIView):
+# class Employees (generics.ListCreateAPIView):
 #     queryset = Employee.objects.all()
 #     serializer_class = EmployeesSerializer
 #
@@ -137,35 +140,41 @@ def studentDetailView(request, pk):
 #     serializer_class = EmployeesSerializer
 #     lookup_field = 'pk'
 
-class EmployeeViewSet(viewsets.ViewSet):
-    def list(self, request):
-        queryset = Employee.objects.all()
-        serializer = EmployeesSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+# viewsets.ViewSet
+# class EmployeeViewSet(viewsets.ViewSet):
+#     def list(self, request):
+#         queryset = Employee.objects.all()
+#         serializer = EmployeesSerializer(queryset, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+#
+#     def create(self, request):
+#         serializer = EmployeesSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#     def retrieve(self, request, pk=None):
+#         employee = get_object_or_404(Employee, pk=pk)
+#         serializer = EmployeesSerializer(employee)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+#
+#     def update(self, request, pk=None):
+#         employee = get_object_or_404(Employee, pk=pk)
+#         serializer = EmployeesSerializer(employee, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#     def delete(self, request, pk=None):
+#         employee = get_object_or_404(Employee, pk=pk)
+#         employee.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    def create(self, request):
-        serializer = EmployeesSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def retrieve(self, request, pk=None):
-        employee = get_object_or_404(Employee, pk=pk)
-        serializer = EmployeesSerializer(employee)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def update(self, request, pk=None):
-        employee = get_object_or_404(Employee, pk=pk)
-        serializer = EmployeesSerializer(employee, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk=None):
-        employee = get_object_or_404(Employee, pk=pk)
-        employee.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+# Gives access to CRUD operations using viewsets.ModelViewSet
+class EmployeeViewSet(viewsets.ModelViewSet):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeesSerializer
 
 
