@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from blogs.models import Blog, Comment
 from blogs.serializers import BlogSerializer, CommentSerializer
+from .paginations import CustomPagination
 
 import employees
 from blogs.models import Blog
@@ -179,6 +180,7 @@ def studentDetailView(request, pk):
 class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeesSerializer
+    pagination_class = CustomPagination
 
 # Give access to CRUD operations using generics
 class BlogsView(generics.ListCreateAPIView):
