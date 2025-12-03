@@ -1,4 +1,3 @@
-from Demos.mmapfile_demo import page_size
 from  rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
