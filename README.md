@@ -7,6 +7,7 @@ and ordering.The project includes multiple Django apps (students, employees, blo
 
 ## Tech Stack
 - Python (Django)
+- Storage: sqlite
 
 ## Future improvements
 - Add unit tests for models, serializers, and views
