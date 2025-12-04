@@ -8,6 +8,7 @@ from blogs.models import Blog, Comment
 from blogs.serializers import BlogSerializer, CommentSerializer
 from .paginations import CustomPagination
 from employees.filters import EmployeeFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 import employees
 from blogs.models import Blog
@@ -188,6 +189,9 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 class BlogsView(generics.ListCreateAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['blog_title', 'blog_body']
+    ordering_fields = ['id']
 
 class BlogDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Blog.objects.all()
